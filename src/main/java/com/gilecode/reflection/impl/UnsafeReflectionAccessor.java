@@ -8,7 +8,7 @@ import java.lang.reflect.Field;
 
 /**
  * An implementation of {@link ReflectionAccessor} based on {@link Unsafe}.
- * <p/>
+ * <p>
  * NOTE: This implementation is designed for Java 9. Although it should work with earlier Java releases, it is better to
  * use {@link PreJava9ReflectionAccessor} for them.
  *

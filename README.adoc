@@ -33,7 +33,7 @@ In Maven projects, just add the following dependency:
 [source,xml]
 ----
   <dependency>
-    <groupId>com.gilecode.reflection</groupId>
+    <groupId>com.gilecode.yagson</groupId>
     <artifactId>j9-reflection-utils</artifactId>
     <version>[1.0,)</version>
   </dependency>

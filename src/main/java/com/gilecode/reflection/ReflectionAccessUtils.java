@@ -15,7 +15,7 @@ import java.lang.reflect.Field;
  *     WARNING: Illegal reflective access by ...
  *     </pre>- just call {@link ReflectionAccessUtils#suppressIllegalReflectiveAccessWarnings()} to suppress them.
  *     </li>
- *     <br/>
+ *     <br>
  *     <li>
  *     If there is a {@link java.lang.reflect.InaccessibleObjectException} thrown in your code,
  *     obtain a {@link ReflectionAccessor} with {@link #getReflectionAccessor()} and use its
@@ -29,7 +29,7 @@ public class ReflectionAccessUtils {
 
     /**
      * Obtains a {@link ReflectionAccessor} instance suitable for the current Java version.
-     * <p/>
+     * <p>
      * You may need one a reflective operation in your code throws {@link java.lang.reflect.InaccessibleObjectException}.
      * In such a case, use {@link ReflectionAccessor#makeAccessible(AccessibleObject)} on a field, method or constructor
      * (instead of basic {@link AccessibleObject#setAccessible(boolean)}).

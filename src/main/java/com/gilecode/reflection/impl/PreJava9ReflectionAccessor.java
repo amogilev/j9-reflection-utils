@@ -6,7 +6,7 @@ import java.lang.reflect.AccessibleObject;
 
 /**
  * A basic implementation of {@link ReflectionAccessor} which is suitable for Java 8 and below.
- * <p/>
+ * <p>
  * This implementation just calls {@link AccessibleObject#setAccessible(boolean) setAccessible(true)}, which worked
  * fine before Java 9.
  *
