@@ -1,0 +1,94 @@
+= Java 9 Reflection Utils
+
+== Overview
+
+The Reflection API is used to be a powerful Java feature which is able to grant a full access to internals of any
+Java object at the run time, including access to the private fields and methods. Although such access obviously breaks
+the encapsulation principle, it is still very helpful and used in a lot of Java frameworks and libraries. For a major
+part of them, the reflection is irreplaceable.
+
+However, Java 9 brings restrictions over the usage of reflection, when applied to internal parts of JDK and
+other modules. In practice, you may encounter warnings like this:
+----
+WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by X to field Y
+WARNING: Please consider reporting this to the maintainers of Z
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+----
+
+Or, in worse cases, you may encounter exceptions like this:
+----
+java.lang.IllegalAccessException: class X cannot access class Y (in module Z) because module Z does not export X to unnamed module @32e6e9c3
+----
+
+Ideally, these "illegal" accesses shall be changed to something else, but it is not always possible.
+And that's exactly why the "Java 9 Reflection Utils" library is created: to solve these issues without removing
+reflection from your code!
+
+
+== Download
+
+In Maven projects, just add the following dependency:
+[source,xml]
+----
+  <dependency>
+    <groupId>com.gilecode.reflection</groupId>
+    <artifactId>j9-reflection-utils</artifactId>
+    <version>[1.0,)</version>
+  </dependency>
+----
+
+Otherwise, download the latest link:https://github.com/amogilev/j9-reflection-utils/releases[release at GitHub] and add
+`j9-reflection-utils-__version__.jar` to the application classpath.
+
+== How to use
+
+=== Making accessible reflective operations in your code
+
+If you have an "illegal" reflective operation in your code, which causes a warning or an exception, all you need is
+to make a reflection target (`Field`, `Method` or `Constructor`) accessible using the `ReflectionAccessor` instance
+provided by the `ReflectionAccessUtils` factory:
+
+[source,java]
+----
+  ReflectionAccessor accessor = ReflectionAccessUtils.getReflectionAccessor();
+  Field target = someClass.getDeclaredField("someField");
+  // DO NOT USE setAccessible(), replace with makeAccessible()!
+  // target.setAccessible(true);
+  accessor.makeAccessible(target);
+----
+
+After `makeAccessible`, the reflective operations on a target, such as a field get/set, a method or constructor
+invocation, works with no warnings or exceptions, similar to how it was before Java 9.
+
+=== Suppressing warnings for reflective operations in third-party code
+
+If the reflective operations which causes warnings are located in a third-party library, you usually cannot change
+them by yourself. However, `ReflectionAccessUtils` provides a convenient way to suppress the warnings printed for such
+operations. Just call
+
+[source,java]
+----
+  ReflectionAccessUtils.suppressIllegalReflectiveAccessWarnings();
+----
+
+somewhere at your code before the first call to that third-party library, and no warning will be printed.
+
+[NOTE]
+=====
+This call only suppresses warnings! If there is an IllegalAccessException thrown from a third-party library, you may
+need to use other ways to fix it.
+=====
+
+== System requirements
+
+The library works on Java 7 or later. When run on Java 7 or Java 8, the implementation of a `makeAccessible` method
+just invokes basic `setAccessible(true)`, and the `suppressIllegalReflectiveAccessWarnings` method just does
+nothing.
+
+== License
+
+Licensed under the Apache License, Version 2.0
+
+See link:LICENSE[the License file]
